@@ -25,7 +25,7 @@ They allow to read and modify existing parameters but also overwrite the default
 
 ### Include
 
-Basic overview of the header file:
+Overview of the header file:
 
 ```cpp
 namespace xdead {
@@ -129,6 +129,9 @@ definition file and then load each module sequentially.
 ```
 
 ## Supported Functions
+
+<details>
+  <summary>View table</summary>
 
 ||Function|Ordinal|
 |:-:|---|:-:|
@@ -384,8 +387,12 @@ definition file and then load each module sequentially.
 ||XMarketplaceGetImageUrl|5375|
 ||XMarketplaceCreateOfferEnumeratorByOffering|5376|
 ||XUserFindUsers|5377|
+</details>
 
-## TODO
+### TODO
+
+<details>
+  <summary>View list</summary>
 
 - XWSAStartup
 - XWSACleanup
@@ -516,6 +523,7 @@ definition file and then load each module sequentially.
 - XMarketplaceGetImageUrl
 - XMarketplaceCreateOfferEnumeratorByOffering
 - XUserFindUsers
+</details>
 
 ## Credits
 
