@@ -1,0 +1,29 @@
+name: release
+
+on:
+  push:
+    tags:
+    - '*'
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Add MSBuild to PATH
+      uses: microsoft/setup-msbuild@v1.1
+
+    - name: Build
+      working-directory: ${{env.GITHUB_WORKSPACE }}
+      run: msbuild /m /p:Configuration=Release /p:Platform=x86 /t:xdead
+
+    - name: Create archive
+      run: 7z a ${{ github.ref_name }}-release.zip ./bin/Release/xlive.dll
+
+    - name: Create release
+      uses: softprops/action-gh-release@v1
+      with:
+        files: ${{ github.ref_name }}-release.zip
+        prerelease: ${{ contains(github.ref, 'pre') }}

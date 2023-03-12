@@ -1,0 +1,38 @@
+name: build
+
+on:
+  push:
+    branches: [ "main" ]
+    paths:
+    - 'src/**'
+  pull_request:
+    branches: [ "main" ]
+    paths:
+    - 'src/**'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    if: contains(github.event.head_commit.message, '[ci build]')
+
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Add MSBuild to PATH
+      uses: microsoft/setup-msbuild@v1.1
+
+    - name: Build
+      working-directory: ${{env.GITHUB_WORKSPACE }}
+      run: msbuild /m /p:Configuration=Release /p:Platform=x86 /t:xdead
+
+    - name: Create artifact
+      if: github.event_name != 'pull_request'
+      uses: actions/upload-artifact@v3
+      with:
+          name: xdead
+          path: bin/Release/xlive.dll
