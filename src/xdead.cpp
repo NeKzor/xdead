@@ -487,14 +487,12 @@ DETOUR_API(int, __stdcall, xlive_15, int a1, int a2, int a3, int a4, DWORD a5)
 }
 DETOUR_API(int, __stdcall, xlive_18, int a1, int a2, int a3, int a4)
 {
-    // called frequently
     RUN_LISTENERS(18, "XSocketRecv", a1, a2, a3, a4);
     LOG_AND_RETURN("{:x}, {:x}, {:x}, {:x}", hex(a1), hex(a2), hex(a3), hex(a4));
 }
 DETOUR_API(signed int, __stdcall, xlive_20, int a1, int a2, int a3, char a4, int a5, DWORD* a6)
 {
     SET_RETURN_VALUE(-1);
-    // called frequently when in multiplayer lobby
     RUN_LISTENERS_AND_RETURN(20, "XSocketRecvFrom", a1, a2, a3, a4, a5, a6);
     LOG_AND_RETURN("{:x}, {:x}, {:x}, {:x}, {:x}, {:x}", hex(a1), hex(a2), hex(a3), hex(a4), hex(a5), hex(a6));
 }
@@ -511,7 +509,6 @@ DETOUR_API(signed int, __stdcall, xlive_24, int a1, int a2, int a3, int a4, int 
 DETOUR_API(DWORD, __stdcall, xlive_27)
 {
     SET_RETURN_VALUE(0);
-    // called frequently when online
     RUN_LISTENERS_AND_RETURN(27, "XSocketWSAGetLastError");
 }
 DETOUR_API(int, __stdcall, xlive_51, int a1)
@@ -588,7 +585,6 @@ DETOUR_API(signed int, __stdcall, xlive_72, int a1)
 }
 DETOUR_API(int, __stdcall, xlive_73, int a1)
 {
-    // Called frequently
     RUN_LISTENERS_AND_RETURN(73, "XNetGetTitleXnAddr", a1);
     LOG_AND_RETURN("{:x}", hex(a1));
 }
@@ -611,7 +607,6 @@ DETOUR_API(int, __stdcall, xlive_84, int a1)
 DETOUR_API(int, __stdcall, xlive_651, int a1, int a2, DWORD* a3, DWORD* a4)
 {
     SET_RETURN_VALUE(0);
-    // Called frequently
     RUN_LISTENERS_AND_RETURN(651, "XNotifyGetNext", a1, a2, a3, a4);
     LOG_AND_RETURN("{:x}, {:x}, {:x}, {:x}", hex(a1), hex(a2), hex(a3), hex(a4));
 }
@@ -624,26 +619,22 @@ DETOUR_API(int, __stdcall, xlive_652, LONG Value)
 DETOUR_API(DWORD, __stdcall, xlive_1082, int a1)
 {
     SET_RETURN_VALUE(0);
-    // called on login, frequently when online
     RUN_LISTENERS(1082, "XGetOverlappedExtendedError", a1);
     LOG_AND_RETURN("{:x}", hex(a1));
 }
 DETOUR_API(DWORD, __stdcall, xlive_1083, int a1, DWORD* a2, int a3)
 {
     SET_RETURN_VALUE(0);
-    // called on login or when gfwl ui opens, frequently when online
     RUN_LISTENERS_AND_RETURN(1083, "XGetOverlappedResult", a1, a2, a3);
     LOG_AND_RETURN("{:x}, {:x}, {:x}", hex(a1), hex(a2), hex(a3));
 }
 DETOUR_API(signed int, __stdcall, xlive_5001, int a1)
 {
-    // frequent call
     RUN_LISTENERS_AND_RETURN(5001, "XLiveInput", a1);
     LOG_AND_RETURN("{:x}", hex(a1));
 }
 DETOUR_API(unsigned int, __stdcall, xlive_5002)
 {
-    // frequent call
     RUN_LISTENERS_AND_RETURN(5002, "XLiveRender");
 }
 DETOUR_API(int, __stdcall, xlive_5003)
@@ -683,20 +674,17 @@ DETOUR_API(signed int, __stdcall, xlive_5017, int a1)
 DETOUR_API(int, __stdcall, xlive_5030, HIMC a1)
 {
     SET_RETURN_VALUE(0);
-    // frequently called when window focused
     RUN_LISTENERS_AND_RETURN(5030, "XLivePreTranslateMessage", a1);
     LOG_AND_RETURN("{:x}", hex(a1));
 }
 DETOUR_API(int, __stdcall, xlive_5031, unsigned int a1, DWORD* a2)
 {
-    // Wait, this sounds interesting...
     SET_RETURN_VALUE(0);
     RUN_LISTENERS(5031, "XLiveSetDebugLevel", a1, a2);
     LOG_AND_RETURN("{:x}, {:x}", hex(a1), hex(a2));
 }
 DETOUR_API(int, __stdcall, xlive_5212, int a1, int a2, int a3, int a4, int a5, int a6, int a7, int a8, void* Src, void* a10, int a11, int a12)
 {
-    // called frequently on login
     RUN_LISTENERS(5212, "XShowCustomPlayerListUI", a1, a2, a3, a4, a5, a6, a7, a8, Src, a10, a11, a12);
     LOG_AND_RETURN("{:x}, {:x}, {:x}, {:x}, {:x}, {:x}, {:x}, {:x}, {:x}, {:x}, {:x}, {:x}", hex(a1), hex(a2), hex(a3), hex(a4), hex(a5), hex(a6), hex(a7), hex(a8), hex(Src), hex(a10), hex(a11), hex(a12));
 }
@@ -714,7 +702,6 @@ DETOUR_API(signed int, __stdcall, xlive_5216, int a1, int a2, int a3, int a4, in
 DETOUR_API(int, __stdcall, xlive_5251, HANDLE hObject)
 {
     SET_RETURN_VALUE(1);
-    // called frequently acquiring a handle
     RUN_LISTENERS(5251, "XCloseHandle", hObject);
     LOG_AND_RETURN("{:x}", hex(hObject));
 }
@@ -726,59 +713,7 @@ DETOUR_API(signed int, __stdcall, xlive_5252, int a1, __int64 a2)
 }
 DETOUR_API(int, __stdcall, xlive_5256, int a1, int a2, int a3, DWORD* a4, int a5)
 {
-    struct XLiveLeaderboardStats {
-        char unk_0000[40]; // 0x00
-        uint32_t xp; // 0x28
-        char unk_002c[20]; // 0x2c
-        uint32_t derezz; // 0x40
-        char unk_0044[20]; // 0x44
-        uint32_t wipes; // 0x58
-        char unk_005c[20]; // 0x5c
-        uint32_t assists; // 0x70
-        char unk_0074[20]; // 0x74
-        uint32_t bits_nodes; // 0x88
-        char unk_008c[20]; // 0x8c
-        uint32_t played; // 0xa0
-        char unk_00a4[28]; // 0xa4
-    };
-    static_assert(offsetof(XLiveLeaderboardStats, xp) == 0x28);
-    static_assert(offsetof(XLiveLeaderboardStats, derezz) == 0x40);
-    static_assert(offsetof(XLiveLeaderboardStats, wipes) == 0x58);
-    static_assert(offsetof(XLiveLeaderboardStats, assists) == 0x70);
-    static_assert(offsetof(XLiveLeaderboardStats, bits_nodes) == 0x88);
-    static_assert(offsetof(XLiveLeaderboardStats, played) == 0xa0);
-    static_assert(sizeof(XLiveLeaderboardStats) == 0xc0);
-
-    struct XLiveLeaderboardEntry {
-        ULONGLONG xuid; // 0x00
-        uint32_t rank; // 0x0x8
-        char unk_000c[12]; // 0x0c
-        char gamer_tag[16]; // 0x18
-        uint32_t columns; // 0x28
-        XLiveLeaderboardStats* stats; // 0x2c
-    };
-    static_assert(offsetof(XLiveLeaderboardEntry, xuid) == 0x00);
-    static_assert(offsetof(XLiveLeaderboardEntry, rank) == 0x08);
-    static_assert(offsetof(XLiveLeaderboardEntry, gamer_tag) == 0x18);
-    static_assert(offsetof(XLiveLeaderboardEntry, columns) == 0x28);
-    static_assert(offsetof(XLiveLeaderboardEntry, stats) == 0x2c);
-    static_assert(sizeof(XLiveLeaderboardEntry) == 0x30);
-
-    struct XLiveLeaderboard {
-        uint32_t unk_0000; // 0x00
-        uint32_t unk_0004; // 0x04
-        uint32_t unk_0008; // 0x08
-        uint32_t unk_000c; // 0x0c
-        uint32_t count; // 0x10
-        XLiveLeaderboardEntry* first_entry; // 0x14
-        XLiveLeaderboardEntry entries[22]; // 0x18
-    };
-    static_assert(offsetof(XLiveLeaderboard, count) == 0x10);
-    static_assert(offsetof(XLiveLeaderboard, first_entry) == 0x14);
-    static_assert(offsetof(XLiveLeaderboard, entries) == 0x18);
-
     SET_RETURN_VALUE(0);
-    // called after login
     RUN_LISTENERS(5256, "XEnumerate", a1, a2, a3, a4, a5);
     LOG_AND_RETURN("{:x}, {:x}, {:x}, {:x}, {:x}", hex(a1), hex(a2), hex(a3), hex(a4), hex(a5));
 }
@@ -796,7 +731,6 @@ DETOUR_API(XUSER_SIGNIN_STATE, __stdcall, xlive_5262, int a1)
 DETOUR_API(int, __stdcall, xlive_5263, uint32_t user_index, CHAR* user_name, uint32_t user_name_length)
 {
     SET_RETURN_VALUE(0);
-    // called after login
     RUN_LISTENERS(5263, "XUserGetName", user_index, user_name, user_name_length);
     LOG_AND_RETURN("{:x}, {:x}, {:x}", hex(user_index), hex(user_name), hex(user_name_length));
 }
@@ -807,39 +741,12 @@ DETOUR_API(int, __stdcall, xlive_5265, unsigned int a1, int a2, DWORD* a3)
 }
 DETOUR_API(signed int, __stdcall, xlive_5267, uint32_t user_index, uint32_t flags, XUSER_SIGNIN_INFO* signin_info)
 {
-    if (signin_info) {
-        // TODO: Figure out new self-made login system:
-        //          - Fallback to GFWL?
-        //          - Should we auto-login? Which GFWL account should it be?
-
-        signin_info->xuid = 0xE00000FDAD8D3F73; // TODO: This should be variable
-        signin_info->flags = 0;
-        signin_info->user_signin_state = XUSER_SIGNIN_STATE::SignedInLocally;
-        signin_info->guest_number = 0;
-        signin_info->sponsor_user_index = 254;
-        memcpy(signin_info->user_name, "NeKz", 5); // TODO: This should be variable
-        return 0;
-    }
-
     SET_RETURN_VALUE(0);
-
-    // called after login
     RUN_LISTENERS(5267, "XUserGetSigninInfo", user_index, flags, signin_info);
-    
-    if (signin_info) {
-        println("[xdead] signin_info->xuid = {:X}", signin_info->xuid);
-        println("[xdead] signin_info->flags = {}", signin_info->flags);
-        println("[xdead] signin_info->user_signin_state = {}", uint32_t(signin_info->user_signin_state));
-        println("[xdead] signin_info->guest_number = {}", signin_info->guest_number);
-        println("[xdead] signin_info->sponsor_user_index = {}", signin_info->sponsor_user_index);
-        println("[xdead] signin_info->user_name = {}", signin_info->user_name);
-    }
-
     LOG_AND_RETURN("{:x}, {:x}, {:x}", hex(user_index), hex(flags), hex(signin_info));
 }
 DETOUR_API(int, __stdcall, xlive_5270, __int64 a1)
 {
-    // NOTE: The game needs a value or it will fail to initialize.
     SET_RETURN_VALUE(1);
     RUN_LISTENERS(5270, "XNotifyCreateListener", a1);
     LOG_AND_RETURN("{:x}", a1);
@@ -873,7 +780,6 @@ DETOUR_API(signed int, __stdcall, xlive_5279, int a1, int a2, int a3, int a4, in
 DETOUR_API(signed int, __stdcall, xlive_5280, int a1, int a2, int a3, unsigned int a4, int a5, unsigned int a6, unsigned int a7, int a8, int a9)
 {
     SET_RETURN_VALUE(0);
-    // called after login
     RUN_LISTENERS(5280, "XUserCreateAchievementEnumerator", a1, a2, a3, a4, a5, a6, a7, a8, a9);
     LOG_AND_RETURN("{:x}, {:x}, {:x}, {:x}, {:x}, {:x}, {:x}, {:x}, {:x}", hex(a1), hex(a2), hex(a3), hex(a4), hex(a5), hex(a6), hex(a7), hex(a8), hex(a9));
 }
@@ -884,21 +790,6 @@ DETOUR_API(int, __stdcall, xlive_5281, int a1, unsigned int a2, int a3, unsigned
 }
 DETOUR_API(int, __stdcall, xlive_5284, int a1, int a2, int a3, int a4, void* Src, int a6, int a7)
 {
-    struct XUSER_STATS_SPEC {
-	    DWORD view_id;
-	    DWORD num_column_ids;
-	    WORD rgw_column_ids[64];
-    };
-
-    auto a5 = (XUSER_STATS_SPEC*)Src;
-    println("[xdead] view_id = {}", a5->view_id);
-    println("[xdead] num_column_ids = {}", a5->num_column_ids);
-    println("[xdead] rgw_column_ids[0] = {}", a5->rgw_column_ids[0]);
-    println("[xdead] rgw_column_ids[1] = {}", a5->rgw_column_ids[1]);
-    println("[xdead] rgw_column_ids[2] = {}", a5->rgw_column_ids[2]);
-    println("[xdead] rgw_column_ids[3] = {}", a5->rgw_column_ids[3]);
-    println("[xdead] rgw_column_ids[4] = {}", a5->rgw_column_ids[4]);
-
     SET_RETURN_VALUE(0);
     RUN_LISTENERS(5284, "XUserCreateStatsEnumeratorByRank", a1, a2, a3, a4, Src, a6, a7);
     LOG_AND_RETURN("{:x}, {:x}, {:x}, {:x}, {:x}, {:x}, {:x}", hex(a1), hex(a2), hex(a3), hex(a4), hex(Src), hex(a6), hex(a7));
@@ -917,7 +808,6 @@ DETOUR_API(int, __stdcall, xlive_5292, int a1, int a2, int a3, int a4)
 DETOUR_API(int, __stdcall, xlive_5293, int a1, int a2, int a3, int a4, int a5)
 {
     SET_RETURN_VALUE(0);
-    // called on level load?
     RUN_LISTENERS(5293, "XUserSetPropertyEx", a1, a2, a3, a4, a5);
     LOG_AND_RETURN("{:x}, {:x}, {:x}, {:x}, {:x}", hex(a1), hex(a2), hex(a3), hex(a4), hex(a5));
 }
@@ -955,10 +845,7 @@ DETOUR_API(int, __stdcall, xlive_5311)
 }
 DETOUR_API(signed int, __stdcall, xlive_5312, int a1, int a2, int a3, int a4, int a5)
 {
-    // NOTE: The game needs a value or it will loop forever when exiting.
     SET_RETURN_VALUE(1);
-
-    // called after login, or when loading/exiting main menu
     RUN_LISTENERS(5312, "XFriendsCreateEnumerator", a1, a2, a3, a4, a5);
     LOG_AND_RETURN("{:x}, {:x}, {:x}, {:x}, {:x}", hex(a1), hex(a2), hex(a3), hex(a4), hex(a5));
 }
@@ -1033,7 +920,6 @@ DETOUR_API(uintptr_t, __stdcall, xlive_5330, int a1, int a2)
 DETOUR_API(signed int, __stdcall, xlive_5331, int a1, int a2, int a3, int a4, DWORD* a5, int a6, int a7)
 {
     SET_RETURN_VALUE(0);
-    // called after login
     RUN_LISTENERS(5331, "XUserReadProfileSettings", a1, a2, a3, a4, a5, a6, a7);
     LOG_AND_RETURN("{:x}, {:x}, {:x}, {:x}, {:x}, {:x}, {:x}", hex(a1), hex(a2), hex(a3), hex(a4), hex(a5), hex(a6), hex(a7));
 }
@@ -1104,7 +990,6 @@ DETOUR_API(int, __stdcall, xlive_5356, int a1, int a2, char* a3, unsigned int* a
 }
 DETOUR_API(signed int, __stdcall, xlive_5360, unsigned int a1, int a2, DWORD* a3, int* a4)
 {
-    // called after login
     RUN_LISTENERS(5360, "XLiveContentCreateEnumerator", a1, a2, a3, a4);
     LOG_AND_RETURN("{:x}, {:x}, {:x}, {:x}", hex(a1), hex(a2), hex(a3), hex(a4));
 }
@@ -1197,7 +1082,6 @@ DETOUR_API(int, __stdcall, xlive_5036, int a1, int a2)
 }
 DETOUR_API(int, __stdcall, xlive_5038, int a1)
 {
-    // Isn't it interesting how this function crashes if we do not hook it?
     SET_RETURN_VALUE(0);
     RUN_LISTENERS(5038, "XLiveCloseProtectedDataContext", a1);
     LOG_AND_RETURN("{:x}", hex(a1));
