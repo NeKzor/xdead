@@ -585,6 +585,7 @@ DETOUR_API(signed int, __stdcall, xlive_72, int a1)
 }
 DETOUR_API(int, __stdcall, xlive_73, int a1)
 {
+    SET_RETURN_VALUE(1);
     RUN_LISTENERS_AND_RETURN(73, "XNetGetTitleXnAddr", a1);
     LOG_AND_RETURN("{:x}", hex(a1));
 }
