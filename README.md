@@ -1,27 +1,30 @@
 # XDead
 
-Minimal replacement for XLive (GFWL).
+Minimal replacement layer for XLive (GFWL).
 
 ## Overview
 
 - [Tested Games](#tested-games)
-- [Listener API](#api)
-- [Automatic Module Loader](#automatic-module-loader)
+- [Listener API (WIP)](#api-wip)
+- [Automatic Module Loader (TODO)](#automatic-module-loader-todo)
 - [Supported Functions](#supported-functions)
+- [TODO](#todo)
 - [Credits](#credits)
 
 ## Tested Games
 
-|Game|Implemented in|
+|Game|Implementation|
 |---|:-:|
-|Tron: Evolution|[tem][] for offline usage and support on Linux w/Wine|
+|Tron: Evolution|Used in [TEM][] for offline usage and support on Linux w/Wine.|
 
-[tem]: https://github.com/NeKzor/tem
+[TEM]: https://github.com/NeKzor/tem
 
-## API
+## API (WIP)
 
 Listeners are user-defined callbacks which are used to hook into functions.
 They allow to read and modify existing parameters but also overwrite the default return value.
+
+TODO: Expose function signatures as types/macros? Or allow exports like `XDead_XFriendsCreateEnumerator`?
 
 ### Include
 
@@ -108,11 +111,13 @@ xdead_remove_listener(XFriendsCreateEnumerator_callback);
 xdead_remove_all_listeners();
 ```
 
-## Automatic Module Loader
+## Automatic Module Loader (TODO)
 
 XDead can also be used to load additional modules automatically.
 When the main process calls into `XLiveInitialize/XLiveInitializeEx`, it will check for an existing `xdead.json`
 definition file and then load each module sequentially.
+
+TODO: Use YAML instead of JSON?
 
 ```json
 {
