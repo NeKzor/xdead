@@ -5,6 +5,9 @@ on:
     tags:
     - '*'
 
+permissions:
+  contents: write
+
 jobs:
   build:
     runs-on: windows-latest
@@ -20,10 +23,14 @@ jobs:
       run: msbuild /m /p:Configuration=Release /p:Platform=x86 /t:xdead
 
     - name: Create archive
-      run: 7z a ${{ github.ref_name }}-release.zip ./bin/Release/xlive.dll
+      run: 7z a xdead-${{ github.ref_name }}.zip ./bin/Release/xlive.dll
 
     - name: Create release
       uses: softprops/action-gh-release@v1
       with:
-        files: ${{ github.ref_name }}-release.zip
+        name: XDead ${{ github.ref_name }}
+        body: |
+          [READ tested games first](https://github.com/NeKzor/xdead#tested-games)
+          [Download xdead-${{ github.ref_name }}.zip](https://github.com/NeKzor/xdead/releases/download/${{ github.ref_name }}/xdead-${{ github.ref_name }}.zip)
+        files: xdead-${{ github.ref_name }}.zip
         prerelease: ${{ contains(github.ref, 'pre') }}
