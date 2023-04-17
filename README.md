@@ -1,6 +1,8 @@
+[![build](https://github.com/NeKzor/xdead/actions/workflows/build.yml/badge.svg)](https://github.com/NeKzor/xdead/actions/workflows/build.yml)
+
 # XDead
 
-Minimal replacement layer for XLive (GFWL).
+Minimal replacement layer for Games for Windows Live (GFWL) aka XLive.
 
 ## Overview
 
@@ -62,6 +64,8 @@ using remove_all_listeners_t = decltype(&remove_all_listeners);
 The basic philosophy is to reimplement a small surface of the API, only to get the game working.
 After this step the user has the freedom for creativity to rewrite any features of XLive like account management,
 save files and UI etc.
+
+TODO: could we use "context" for controlling the return-value?
 
 ```cpp
 // Define a callback
